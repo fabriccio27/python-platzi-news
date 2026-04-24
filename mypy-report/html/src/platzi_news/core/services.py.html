@@ -106,6 +106,19 @@
 <span id="L96" class="lineno"><a class="lineno" href="#L96">96</a></span>
 <span id="L97" class="lineno"><a class="lineno" href="#L97">97</a></span>
 <span id="L98" class="lineno"><a class="lineno" href="#L98">98</a></span>
+<span id="L99" class="lineno"><a class="lineno" href="#L99">99</a></span>
+<span id="L100" class="lineno"><a class="lineno" href="#L100">100</a></span>
+<span id="L101" class="lineno"><a class="lineno" href="#L101">101</a></span>
+<span id="L102" class="lineno"><a class="lineno" href="#L102">102</a></span>
+<span id="L103" class="lineno"><a class="lineno" href="#L103">103</a></span>
+<span id="L104" class="lineno"><a class="lineno" href="#L104">104</a></span>
+<span id="L105" class="lineno"><a class="lineno" href="#L105">105</a></span>
+<span id="L106" class="lineno"><a class="lineno" href="#L106">106</a></span>
+<span id="L107" class="lineno"><a class="lineno" href="#L107">107</a></span>
+<span id="L108" class="lineno"><a class="lineno" href="#L108">108</a></span>
+<span id="L109" class="lineno"><a class="lineno" href="#L109">109</a></span>
+<span id="L110" class="lineno"><a class="lineno" href="#L110">110</a></span>
+<span id="L111" class="lineno"><a class="lineno" href="#L111">111</a></span>
 </pre></td>
 <td class="table-code"><pre><span class="line-empty" title="No Anys on this line!">"""Service layer for news operations."""</span>
 <span class="line-empty" title="No Anys on this line!"></span>
@@ -160,6 +173,19 @@
 <span class="line-empty" title="No Anys on this line!">        """</span>
 <span class="line-precise" title="No Anys on this line!">        source = self.get_source(source_name)</span>
 <span class="line-precise" title="No Anys on this line!">        return source.fetch_articles(query)</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">    async def asearch_articles(self, source_name: str, query: str) -&gt; list[Article]:</span>
+<span class="line-empty" title="No Anys on this line!">        """Search for articles from a specific source.</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-empty" title="No Anys on this line!">        Args:</span>
+<span class="line-empty" title="No Anys on this line!">            source_name: The name of the news source to search in.</span>
+<span class="line-empty" title="No Anys on this line!">            query: The search query string.</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-empty" title="No Anys on this line!">        Returns:</span>
+<span class="line-empty" title="No Anys on this line!">            A list of Article objects matching the query.</span>
+<span class="line-empty" title="No Anys on this line!">        """</span>
+<span class="line-precise" title="No Anys on this line!">        source = self.get_source(source_name)</span>
+<span class="line-precise" title="No Anys on this line!">        return await source.afetch_articles(query)</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">    def analyze_articles(self, articles: list[Article], question: str) -&gt; str:</span>
 <span class="line-empty" title="No Anys on this line!">        """Analyze articles and answer a question.</span>

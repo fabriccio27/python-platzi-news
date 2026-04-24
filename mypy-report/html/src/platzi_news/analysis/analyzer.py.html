@@ -139,13 +139,37 @@
 <span id="L129" class="lineno"><a class="lineno" href="#L129">129</a></span>
 <span id="L130" class="lineno"><a class="lineno" href="#L130">130</a></span>
 <span id="L131" class="lineno"><a class="lineno" href="#L131">131</a></span>
+<span id="L132" class="lineno"><a class="lineno" href="#L132">132</a></span>
+<span id="L133" class="lineno"><a class="lineno" href="#L133">133</a></span>
+<span id="L134" class="lineno"><a class="lineno" href="#L134">134</a></span>
+<span id="L135" class="lineno"><a class="lineno" href="#L135">135</a></span>
+<span id="L136" class="lineno"><a class="lineno" href="#L136">136</a></span>
+<span id="L137" class="lineno"><a class="lineno" href="#L137">137</a></span>
+<span id="L138" class="lineno"><a class="lineno" href="#L138">138</a></span>
+<span id="L139" class="lineno"><a class="lineno" href="#L139">139</a></span>
+<span id="L140" class="lineno"><a class="lineno" href="#L140">140</a></span>
+<span id="L141" class="lineno"><a class="lineno" href="#L141">141</a></span>
+<span id="L142" class="lineno"><a class="lineno" href="#L142">142</a></span>
+<span id="L143" class="lineno"><a class="lineno" href="#L143">143</a></span>
+<span id="L144" class="lineno"><a class="lineno" href="#L144">144</a></span>
+<span id="L145" class="lineno"><a class="lineno" href="#L145">145</a></span>
+<span id="L146" class="lineno"><a class="lineno" href="#L146">146</a></span>
+<span id="L147" class="lineno"><a class="lineno" href="#L147">147</a></span>
+<span id="L148" class="lineno"><a class="lineno" href="#L148">148</a></span>
+<span id="L149" class="lineno"><a class="lineno" href="#L149">149</a></span>
+<span id="L150" class="lineno"><a class="lineno" href="#L150">150</a></span>
+<span id="L151" class="lineno"><a class="lineno" href="#L151">151</a></span>
+<span id="L152" class="lineno"><a class="lineno" href="#L152">152</a></span>
+<span id="L153" class="lineno"><a class="lineno" href="#L153">153</a></span>
 </pre></td>
 <td class="table-code"><pre><span class="line-empty" title="No Anys on this line!">"""OpenAI analyzer for news analysis."""</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">from __future__ import annotations</span>
 <span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">import itertools</span>
 <span class="line-precise" title="No Anys on this line!">import json</span>
 <span class="line-precise" title="No Anys on this line!">import logging</span>
+<span class="line-precise" title="No Anys on this line!">from collections import defaultdict</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">from openai import OpenAI</span>
 <span class="line-empty" title="No Anys on this line!"></span>
@@ -192,7 +216,6 @@
 <span class="line-empty" title="No Anys on this line!">        # Prepare context from articles</span>
 <span class="line-precise" title="No Anys on this line!">        context = "Aquí hay algunos artículos de noticias:\n\n"</span>
 <span class="line-precise" title="No Anys on this line!">        for i, article in enumerate(articles, 1):</span>
-<span class="line-precise" title="No Anys on this line!">            variable = "asdf {}".format(i)</span>
 <span class="line-precise" title="No Anys on this line!">            if hasattr(article, "title"):  # Article object</span>
 <span class="line-precise" title="No Anys on this line!">                title = article.title</span>
 <span class="line-precise" title="No Anys on this line!">                desc = article.description</span>
@@ -210,7 +233,9 @@
 <span class="line-empty" title="No Anys on this line!">                messages=[</span>
 <span class="line-empty" title="No Anys on this line!">                    {</span>
 <span class="line-precise" title="No Anys on this line!">                        "role": "system",</span>
-<span class="line-precise" title="No Anys on this line!">                        "content": "You are a helpful assistant analyzing news articles.",</span>
+<span class="line-precise" title="No Anys on this line!">                        "content": (</span>
+<span class="line-precise" title="No Anys on this line!">                            "You are a helpful assistant analyzing news articles."</span>
+<span class="line-empty" title="No Anys on this line!">                        ),</span>
 <span class="line-empty" title="No Anys on this line!">                    },</span>
 <span class="line-precise" title="No Anys on this line!">                    {"role": "user", "content": prompt},</span>
 <span class="line-empty" title="No Anys on this line!">                ],</span>
@@ -220,7 +245,7 @@
 <span class="line-precise" title="No Anys on this line!">            content = response.choices[0].message.content</span>
 <span class="line-precise" title="No Anys on this line!">            if content is None:</span>
 <span class="line-precise" title="No Anys on this line!">                raise AnalysisError("OpenAI returned empty response")</span>
-<span class="line-precise" title="No Anys on this line!">            answer = content.strip()</span>
+<span class="line-precise" title="No Anys on this line!">            answer: str = content.strip()</span>
 <span class="line-precise" title="No Anys on this line!">            logger.info("Successfully received analysis from OpenAI")</span>
 <span class="line-precise" title="No Anys on this line!">            return answer</span>
 <span class="line-precise" title="No Anys on this line!">        except Exception as e:</span>
@@ -251,10 +276,10 @@
 <span class="line-precise" title="No Anys on this line!">    data = {"question": question, "articles_count": len(articles), "answer": answer}</span>
 <span class="line-precise" title="Any Types on this line: 
 Unimported (x7)
-Explicit (x1)">    file = open(filename, "w")</span>
+Explicit (x1)">    with open(filename, "w") as file:</span>
 <span class="line-any" title="Any Types on this line: 
-Explicit (x4)">    json.dump(data, file)</span>
-<span class="line-precise" title="No Anys on this line!">    file.close()</span>
+Explicit (x4)">        json.dump(data, file)</span>
+<span class="line-precise" title="No Anys on this line!">        file.close()</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">def get_article_summaries(articles: list[Article]) -&gt; list[str]:</span>
@@ -273,6 +298,27 @@ Explicit (x4)">    json.dump(data, file)</span>
 <span class="line-precise" title="No Anys on this line!">        for j in range(i + 1, len(articles)):</span>
 <span class="line-precise" title="No Anys on this line!">            if articles[i].title == articles[j].title:</span>
 <span class="line-precise" title="No Anys on this line!">                duplicates.append((articles[i], articles[j]))</span>
+<span class="line-precise" title="No Anys on this line!">    return duplicates</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">def find_duplicate_titles_improved(</span>
+<span class="line-empty" title="No Anys on this line!">    articles: list[Article],</span>
+<span class="line-empty" title="No Anys on this line!">) -&gt; list[tuple[Article, Article]]:</span>
+<span class="line-empty" title="No Anys on this line!">    """Find articles with duplicate titles using efficient dictionary-based approach."""</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="Any Types on this line: 
+Omitted Generics (x31)">    title_to_articles = defaultdict(list)</span>
+<span class="line-precise" title="No Anys on this line!">    for article in articles:</span>
+<span class="line-precise" title="No Anys on this line!">        title_to_articles[article.title].append(article)</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">    duplicates = []</span>
+<span class="line-precise" title="No Anys on this line!">    for articles_with_same_title in title_to_articles.values():</span>
+<span class="line-precise" title="No Anys on this line!">        if len(articles_with_same_title) &gt; 1:</span>
+<span class="line-empty" title="No Anys on this line!">            # Generate all unique pairs for this title</span>
+<span class="line-precise" title="Any Types on this line: 
+Omitted Generics (x20)">            for pair in itertools.combinations(articles_with_same_title, 2):</span>
+<span class="line-precise" title="No Anys on this line!">                duplicates.append(pair)</span>
+<span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">    return duplicates</span>
 </pre></td>
 </tr></tbody>

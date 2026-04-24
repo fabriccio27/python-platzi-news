@@ -54,9 +54,23 @@
 <span id="L44" class="lineno"><a class="lineno" href="#L44">44</a></span>
 <span id="L45" class="lineno"><a class="lineno" href="#L45">45</a></span>
 <span id="L46" class="lineno"><a class="lineno" href="#L46">46</a></span>
+<span id="L47" class="lineno"><a class="lineno" href="#L47">47</a></span>
+<span id="L48" class="lineno"><a class="lineno" href="#L48">48</a></span>
+<span id="L49" class="lineno"><a class="lineno" href="#L49">49</a></span>
+<span id="L50" class="lineno"><a class="lineno" href="#L50">50</a></span>
+<span id="L51" class="lineno"><a class="lineno" href="#L51">51</a></span>
+<span id="L52" class="lineno"><a class="lineno" href="#L52">52</a></span>
+<span id="L53" class="lineno"><a class="lineno" href="#L53">53</a></span>
+<span id="L54" class="lineno"><a class="lineno" href="#L54">54</a></span>
+<span id="L55" class="lineno"><a class="lineno" href="#L55">55</a></span>
+<span id="L56" class="lineno"><a class="lineno" href="#L56">56</a></span>
+<span id="L57" class="lineno"><a class="lineno" href="#L57">57</a></span>
+<span id="L58" class="lineno"><a class="lineno" href="#L58">58</a></span>
+<span id="L59" class="lineno"><a class="lineno" href="#L59">59</a></span>
 </pre></td>
 <td class="table-code"><pre><span class="line-empty" title="No Anys on this line!">"""Configuration management for Platzi News."""</span>
 <span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">import sentry_sdk</span>
 <span class="line-precise" title="No Anys on this line!">from pydantic import Field, ValidationError</span>
 <span class="line-precise" title="No Anys on this line!">from pydantic_settings import BaseSettings, SettingsConfigDict</span>
 <span class="line-empty" title="No Anys on this line!"></span>
@@ -80,16 +94,19 @@ Explicit (x2)">class Settings(BaseSettings):</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-empty" title="No Anys on this line!">    # Optional settings with defaults</span>
 <span class="line-precise" title="Any Types on this line: 
-Explicit (x7)
+Explicit (x21)
+Omitted Generics (x5)">    sentry_dsn: str | None = Field(None, description="Sentry DSN")</span>
+<span class="line-precise" title="Any Types on this line: 
+Explicit (x21)
 Omitted Generics (x5)">    max_articles: int = Field(10, description="Maximum number of articles to fetch")</span>
 <span class="line-precise" title="Any Types on this line: 
-Explicit (x7)
+Explicit (x21)
 Omitted Generics (x5)">    request_timeout: int = Field(10, description="Timeout for API requests in seconds")</span>
 <span class="line-precise" title="Any Types on this line: 
-Explicit (x7)
+Explicit (x21)
 Omitted Generics (x5)">    openai_model: str = Field("gpt-4", description="OpenAI model to use for analysis")</span>
 <span class="line-precise" title="Any Types on this line: 
-Explicit (x7)
+Explicit (x21)
 Omitted Generics (x5)">    openai_max_tokens: int = Field(</span>
 <span class="line-precise" title="No Anys on this line!">        500, description="Maximum tokens for OpenAI response"</span>
 <span class="line-empty" title="No Anys on this line!">    )</span>
@@ -105,12 +122,24 @@ Explicit (x10)">        str(err["loc"][0]) for err in e.errors() if err["type"] 
 <span class="line-empty" title="No Anys on this line!">    ]</span>
 <span class="line-precise" title="No Anys on this line!">    if missing_keys:</span>
 <span class="line-precise" title="No Anys on this line!">        msg = (</span>
-<span class="line-precise" title="No Anys on this line!">            f"Las siguientes claves de API no están configuradas: {', '.join(missing_keys)}. "</span>
-<span class="line-empty" title="No Anys on this line!">            "Por favor, configure las variables de entorno en un archivo .env o en su sistema."</span>
+<span class="line-precise" title="No Anys on this line!">            "Las siguientes claves de API no están "</span>
+<span class="line-precise" title="No Anys on this line!">            f"configuradas: {', '.join(missing_keys)}. "</span>
+<span class="line-empty" title="No Anys on this line!">            "Por favor, configure las variables de entorno "</span>
+<span class="line-empty" title="No Anys on this line!">            "en un archivo .env o en su sistema."</span>
 <span class="line-empty" title="No Anys on this line!">        )</span>
 <span class="line-precise" title="No Anys on this line!">        raise ConfigError(msg) from e</span>
 <span class="line-empty" title="No Anys on this line!">    else:</span>
 <span class="line-precise" title="No Anys on this line!">        raise ConfigError(f"Error de configuración: {e}") from e</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">if settings.sentry_dsn:</span>
+<span class="line-precise" title="Any Types on this line: 
+Explicit (x7)">    sentry_sdk.init(</span>
+<span class="line-precise" title="No Anys on this line!">        dsn=settings.sentry_dsn,</span>
+<span class="line-empty" title="No Anys on this line!">        # Add data like request headers and IP for users,</span>
+<span class="line-empty" title="No Anys on this line!">        # see https://docs.sentry.io/platforms/python/data-management/data-collected/</span>
+<span class="line-empty" title="No Anys on this line!">        # for more info</span>
+<span class="line-precise" title="No Anys on this line!">        send_default_pii=True,</span>
+<span class="line-empty" title="No Anys on this line!">    )</span>
 </pre></td>
 </tr></tbody>
 </table>

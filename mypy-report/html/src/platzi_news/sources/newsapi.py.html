@@ -60,17 +60,53 @@
 <span id="L50" class="lineno"><a class="lineno" href="#L50">50</a></span>
 <span id="L51" class="lineno"><a class="lineno" href="#L51">51</a></span>
 <span id="L52" class="lineno"><a class="lineno" href="#L52">52</a></span>
+<span id="L53" class="lineno"><a class="lineno" href="#L53">53</a></span>
+<span id="L54" class="lineno"><a class="lineno" href="#L54">54</a></span>
+<span id="L55" class="lineno"><a class="lineno" href="#L55">55</a></span>
+<span id="L56" class="lineno"><a class="lineno" href="#L56">56</a></span>
+<span id="L57" class="lineno"><a class="lineno" href="#L57">57</a></span>
+<span id="L58" class="lineno"><a class="lineno" href="#L58">58</a></span>
+<span id="L59" class="lineno"><a class="lineno" href="#L59">59</a></span>
+<span id="L60" class="lineno"><a class="lineno" href="#L60">60</a></span>
+<span id="L61" class="lineno"><a class="lineno" href="#L61">61</a></span>
+<span id="L62" class="lineno"><a class="lineno" href="#L62">62</a></span>
+<span id="L63" class="lineno"><a class="lineno" href="#L63">63</a></span>
+<span id="L64" class="lineno"><a class="lineno" href="#L64">64</a></span>
+<span id="L65" class="lineno"><a class="lineno" href="#L65">65</a></span>
+<span id="L66" class="lineno"><a class="lineno" href="#L66">66</a></span>
+<span id="L67" class="lineno"><a class="lineno" href="#L67">67</a></span>
+<span id="L68" class="lineno"><a class="lineno" href="#L68">68</a></span>
+<span id="L69" class="lineno"><a class="lineno" href="#L69">69</a></span>
+<span id="L70" class="lineno"><a class="lineno" href="#L70">70</a></span>
+<span id="L71" class="lineno"><a class="lineno" href="#L71">71</a></span>
+<span id="L72" class="lineno"><a class="lineno" href="#L72">72</a></span>
+<span id="L73" class="lineno"><a class="lineno" href="#L73">73</a></span>
+<span id="L74" class="lineno"><a class="lineno" href="#L74">74</a></span>
+<span id="L75" class="lineno"><a class="lineno" href="#L75">75</a></span>
+<span id="L76" class="lineno"><a class="lineno" href="#L76">76</a></span>
+<span id="L77" class="lineno"><a class="lineno" href="#L77">77</a></span>
+<span id="L78" class="lineno"><a class="lineno" href="#L78">78</a></span>
+<span id="L79" class="lineno"><a class="lineno" href="#L79">79</a></span>
+<span id="L80" class="lineno"><a class="lineno" href="#L80">80</a></span>
+<span id="L81" class="lineno"><a class="lineno" href="#L81">81</a></span>
+<span id="L82" class="lineno"><a class="lineno" href="#L82">82</a></span>
+<span id="L83" class="lineno"><a class="lineno" href="#L83">83</a></span>
+<span id="L84" class="lineno"><a class="lineno" href="#L84">84</a></span>
+<span id="L85" class="lineno"><a class="lineno" href="#L85">85</a></span>
 </pre></td>
 <td class="table-code"><pre><span class="line-empty" title="No Anys on this line!">"""NewsAPI news source."""</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">import logging</span>
 <span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">import httpx</span>
 <span class="line-precise" title="No Anys on this line!">import requests</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">from ..config import settings</span>
 <span class="line-precise" title="No Anys on this line!">from ..core.exceptions import APIError</span>
 <span class="line-precise" title="No Anys on this line!">from ..core.models import Article</span>
 <span class="line-precise" title="No Anys on this line!">from . import NewsSource</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">logger = logging.getLogger(__name__)</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">class NewsAPI(NewsSource):</span>
@@ -83,7 +119,7 @@
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">    def fetch_articles(self, query: str) -&gt; list[Article]:</span>
 <span class="line-empty" title="No Anys on this line!">        """Fetch articles from NewsAPI."""</span>
-<span class="line-precise" title="No Anys on this line!">        logger = logging.getLogger(__name__)</span>
+<span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">        logger.debug(f"Fetching articles from NewsAPI for query: {query}")</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">        params: dict[str, int | str] = {</span>
@@ -116,8 +152,43 @@ Explicit (x4)">                for article in data.get("articles", [])</span>
 <span class="line-precise" title="No Anys on this line!">            return articles</span>
 <span class="line-precise" title="No Anys on this line!">        except requests.RequestException as e:</span>
 <span class="line-precise" title="No Anys on this line!">            logger.error(f"Failed to fetch articles from NewsAPI: {e}")</span>
-<span class="line-precise" title="No Anys on this line!">            msg = f"Error al obtener artículos de NewsAPI: {e}. Verifique su conexión a internet y la clave de API de NewsAPI."</span>
+<span class="line-precise" title="No Anys on this line!">            msg = (</span>
+<span class="line-precise" title="No Anys on this line!">                f"Error al obtener artículos de NewsAPI: {e}. "</span>
+<span class="line-empty" title="No Anys on this line!">                "Verifique su conexión a internet y la clave de API de NewsAPI."</span>
+<span class="line-empty" title="No Anys on this line!">            )</span>
 <span class="line-precise" title="No Anys on this line!">            raise APIError(msg) from e</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">    async def afetch_articles(self, query: str) -&gt; list[Article]:</span>
+<span class="line-empty" title="No Anys on this line!">        """Fetch articles from NewsAPI."""</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">        logger.debug(f"Fetching articles from NewsAPI for query: {query}")</span>
+<span class="line-empty" title="No Anys on this line!"></span>
+<span class="line-precise" title="No Anys on this line!">        params: dict[str, int | str] = {</span>
+<span class="line-precise" title="No Anys on this line!">            "q": query,</span>
+<span class="line-precise" title="No Anys on this line!">            "apiKey": self.api_key,</span>
+<span class="line-precise" title="No Anys on this line!">            "pageSize": settings.max_articles,</span>
+<span class="line-precise" title="No Anys on this line!">            "language": "es",</span>
+<span class="line-empty" title="No Anys on this line!">        }</span>
+<span class="line-precise" title="No Anys on this line!">        async with httpx.AsyncClient() as client:</span>
+<span class="line-precise" title="No Anys on this line!">            response = await client.get(</span>
+<span class="line-precise" title="No Anys on this line!">                self.BASE_URL, params=params, timeout=settings.request_timeout</span>
+<span class="line-empty" title="No Anys on this line!">            )</span>
+<span class="line-any" title="Any Types on this line: 
+Explicit (x4)">            data = response.json()</span>
+<span class="line-precise" title="No Anys on this line!">            articles: list[Article] = [</span>
+<span class="line-precise" title="No Anys on this line!">                Article(</span>
+<span class="line-any" title="Any Types on this line: 
+Explicit (x3)">                    title=article.get("title", ""),</span>
+<span class="line-any" title="Any Types on this line: 
+Explicit (x3)">                    description=article.get("description", ""),</span>
+<span class="line-any" title="Any Types on this line: 
+Explicit (x3)">                    url=article.get("url", ""),</span>
+<span class="line-empty" title="No Anys on this line!">                )</span>
+<span class="line-any" title="Any Types on this line: 
+Explicit (x4)">                for article in data.get("articles", [])</span>
+<span class="line-empty" title="No Anys on this line!">            ]</span>
+<span class="line-precise" title="No Anys on this line!">            logger.info(f"Retrieved {len(articles)} articles from NewsAPI")</span>
+<span class="line-precise" title="No Anys on this line!">            return articles</span>
 </pre></td>
 </tr></tbody>
 </table>

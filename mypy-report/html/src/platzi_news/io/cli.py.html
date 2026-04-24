@@ -117,19 +117,16 @@
 <span id="L107" class="lineno"><a class="lineno" href="#L107">107</a></span>
 <span id="L108" class="lineno"><a class="lineno" href="#L108">108</a></span>
 <span id="L109" class="lineno"><a class="lineno" href="#L109">109</a></span>
-<span id="L110" class="lineno"><a class="lineno" href="#L110">110</a></span>
-<span id="L111" class="lineno"><a class="lineno" href="#L111">111</a></span>
 </pre></td>
 <td class="table-code"><pre><span class="line-empty" title="No Anys on this line!">"""CLI interface for Platzi News."""</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">import logging</span>
-<span class="line-precise" title="No Anys on this line!">import os</span>
 <span class="line-precise" title="No Anys on this line!">import sys</span>
 <span class="line-precise" title="No Anys on this line!">from types import SimpleNamespace</span>
 <span class="line-precise" title="No Anys on this line!">from typing import NoReturn</span>
 <span class="line-empty" title="No Anys on this line!"></span>
-<span class="line-precise" title="No Anys on this line!">from .display import display_answer, display_articles, display_error</span>
 <span class="line-precise" title="No Anys on this line!">from ..core.services import NewsService</span>
+<span class="line-precise" title="No Anys on this line!">from .display import display_answer, display_articles, display_error</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">def print_help() -&gt; None:</span>
@@ -140,14 +137,13 @@
 <span class="line-precise" title="No Anys on this line!">    print("  ask &lt;query&gt; &lt;question&gt; --source &lt;source&gt;    Ask about news")</span>
 <span class="line-precise" title="No Anys on this line!">    print("Options:")</span>
 <span class="line-precise" title="No Anys on this line!">    print(</span>
-<span class="line-precise" title="No Anys on this line!">        "  --log-level &lt;level&gt;    Set log level (DEBUG, INFO, WARNING, ERROR, CRITICAL) and this is a very long line that exceeds the recommended line length for code formatting and readability purposes in Python"</span>
+<span class="line-precise" title="No Anys on this line!">        "  --log-level &lt;level&gt;    Set log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)"</span>
 <span class="line-empty" title="No Anys on this line!">    )</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-precise" title="No Anys on this line!">def parse_args() -&gt; SimpleNamespace:</span>
 <span class="line-empty" title="No Anys on this line!">    """Parse command line arguments manually."""</span>
 <span class="line-precise" title="No Anys on this line!">    log_level = None</span>
-<span class="line-precise" title="No Anys on this line!">    unused_var = "this is unused"</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-empty" title="No Anys on this line!">    # Check for --log-level and remove it</span>
 <span class="line-precise" title="No Anys on this line!">    if "--log-level" in sys.argv:</span>
@@ -196,7 +192,7 @@ Explicit (x3)">        return SimpleNamespace(</span>
 <span class="line-precise" title="No Anys on this line!">        sys.exit(1)</span>
 <span class="line-empty" title="No Anys on this line!"></span>
 <span class="line-empty" title="No Anys on this line!"></span>
-<span class="line-precise" title="No Anys on this line!">def main() -&gt; NoReturn:</span>
+<span class="line-precise" title="No Anys on this line!">async def main() -&gt; NoReturn:</span>
 <span class="line-empty" title="No Anys on this line!">    """Main entry point for the CLI application."""</span>
 <span class="line-precise" title="No Anys on this line!">    args = parse_args()</span>
 <span class="line-empty" title="No Anys on this line!"></span>
@@ -218,7 +214,7 @@ Explicit (x2)">        if args.command == "search":</span>
 <span class="line-any" title="Any Types on this line: 
 Explicit (x2)">            logger.info(f"Searching for '{args.query}' in {args.source}")</span>
 <span class="line-any" title="Any Types on this line: 
-Explicit (x2)">            articles = service.search_articles(args.source, args.query)</span>
+Explicit (x2)">            articles = await service.asearch_articles(args.source, args.query)</span>
 <span class="line-precise" title="No Anys on this line!">            logger.info(f"Found {len(articles)} articles")</span>
 <span class="line-precise" title="No Anys on this line!">            display_articles(articles)</span>
 <span class="line-any" title="Any Types on this line: 
@@ -228,7 +224,7 @@ Explicit (x2)">        elif args.command == "ask":</span>
 Explicit (x3)">                f"Asking '{args.question}' about '{args.query}' from {args.source}"</span>
 <span class="line-empty" title="No Anys on this line!">            )</span>
 <span class="line-any" title="Any Types on this line: 
-Explicit (x2)">            articles = service.search_articles(args.source, args.query)</span>
+Explicit (x2)">            articles = await service.asearch_articles(args.source, args.query)</span>
 <span class="line-precise" title="No Anys on this line!">            logger.info(f"Retrieved {len(articles)} articles for analysis")</span>
 <span class="line-any" title="Any Types on this line: 
 Explicit (x1)">            answer = service.analyze_articles(articles, args.question)</span>
